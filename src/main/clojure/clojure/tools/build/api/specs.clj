@@ -4,3 +4,4 @@
 (s/def ::lib qualified-ident?)
 (s/def ::path string?)
 (s/def ::paths (s/coll-of string?))
+(s/def ::boolean boolean?)

@@ -217,6 +217,26 @@
     :out
     str/trim))
 
+(defn git-hash
+  "Shells out to git and returns hash of commits on this branch:
+    git rev-parse HEAD
+
+  Options:
+    :dir - dir to invoke this command from, by default current directory
+    :short? - shorten hash to 7 length characters"
+  [{:keys [dir short?] :or {dir "."} :as params}]
+  (assert-specs "git-hash" params
+                :dir ::specs/path
+                :short? ::specs/boolean)
+  (-> {:command-args (cond-> ["git" "rev-parse"]
+                       short? (conj "--short")
+                       :default (conj "HEAD"))
+       :dir (.getPath (resolve-path dir))
+       :out :capture}
+      process
+      :out
+      str/trim))
+
 ;; Compile tasks
 
 (defn compile-clj
